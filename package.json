@@ -1,0 +1,32 @@
+{
+  "name": "gameloop",
+  "version": "0.1.0",
+  "description": "a gameloop.",
+  "main": "index.js",
+  "scripts": {
+    "start": "beefy test.js:bundle.js --live"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sethvincent/gameloop.git"
+  },
+  "keywords": [
+    "games",
+    "animation",
+    "game library",
+    "game loop"
+  ],
+  "author": {
+    "name": "Seth Vincent",
+    "email": "sethvincent@gmail.com",
+    "url": "http://sethvincent.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "inherits": "~2.0.0",
+    "ticker": "~0.1.0"
+  },
+  "devDependencies": {
+    "tape": "~2.1.0"
+  }
+}
