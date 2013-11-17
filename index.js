@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('inherits');
-var ticker = require('../ticker/index');
+var ticker = require('ticker');
 
 module.exports = Game;
 inherits(Game, EventEmitter);
