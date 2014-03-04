@@ -9,9 +9,8 @@ var game = new Game({
   renderer: context
 });
 
-game.on('start', function(){
-  game.paused = false;
-})
+game.width = canvas.width = 800;
+game.height = canvas.height = 400;
 
 game.on('pause', function(){
   console.log('paused');
@@ -26,14 +25,10 @@ var keysDown = keyboard.keysDown;
 
 keyboard.on('keydown', function(key){
   if (key === 'P'){
-    console.log('peee happened')
     if (game.paused) game.resume();
     else game.pause();
   }
 });
-
-game.width = canvas.width = 800;
-game.height = canvas.height = 400;
 
 var box = {
   position: {
