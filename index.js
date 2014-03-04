@@ -3,15 +3,46 @@ var inherits = require('inherits');
 
 global || (global = window);
 
-if (!global.requestAnimationFrame) {
-  global.requestAnimationFrame = global.webkitRequestAnimationFrame || 
-                                 global.mozRequestAnimationFrame    || 
-                                 global.oRequestAnimationFrame      || 
-                                 global.msRequestAnimationFrame     || 
-                                 function(callback) {
-                                   setTimeout(callback, 1000 / 60);
-                                 }
-}
+(function () {
+  global.performance = (global.performance || {});
+
+  global.performance.now = (function () {
+    return (
+      global.performance.now ||
+      global.performance.webkitNow ||
+      global.performance.msNow ||
+      global.performance.mozNow ||
+      Date.now ||
+      function () {
+        return +new Date();
+      });
+  })();
+
+  global.requestAnimationFrame = (function () {
+    return (
+      global.requestAnimationFrame ||
+      global.webkitRequestAnimationFrame ||
+      global.msRequestAnimationFrame ||
+      global.mozRequestAnimationFrame ||
+      function (callback) {
+        return setTimeout(function () {
+          var time = global.performance.now();
+          callback(time);
+        }, 16);
+      });
+   })();
+
+  global.cancelAnimationFrame = (function () {
+    return (
+      global.cancelAnimationFrame ||
+      global.webkitCancelAnimationFrame ||
+      global.msCancelAnimationFrame ||
+      global.mozCancelAnimationFrame ||
+      function (id) {
+        clearTimeout(id);
+      });
+  })();
+})();
 
 module.exports = Game;
 inherits(Game, EventEmitter);
