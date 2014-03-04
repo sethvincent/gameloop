@@ -1,6 +1,17 @@
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('inherits');
-var ticker = require('ticker');
+
+global || (global = window);
+
+if (!global.requestAnimationFrame) {
+  global.requestAnimationFrame = global.webkitRequestAnimationFrame || 
+                                 global.mozRequestAnimationFrame    || 
+                                 global.oRequestAnimationFrame      || 
+                                 global.msRequestAnimationFrame     || 
+                                 function(callback) {
+                                   setTimeout(callback, 1000 / 60);
+                                 }
+}
 
 module.exports = Game;
 inherits(Game, EventEmitter);
@@ -16,7 +27,7 @@ function Game(options){
   * Pause the game by default
   */
 
-  this.paused = options.paused || true;
+  this.paused = true;
 
 
   /*
@@ -36,35 +47,36 @@ function Game(options){
 
 
   /*
-  * Ticker
-  */
-
-  this.ticker = ticker(this.fps, 5);
-
-
-  /*
   * Avoid the max listeners error
   */
   
   this.setMaxListeners(options.maxListeners || 0);
 }
 
-Game.prototype.start = function(){
+Game.prototype.start = function(restart){
   var self = this;
   this.paused = false;
-  this.emit('start');
-
-  this.ticker.on('tick', function(interval){
+  this.counter = 0;
+  this.dt = 0;
+  this.now = null;
+  this.last = this.timestamp();
+  
+  function frame() {
     if (!self.paused){
-      self.update(interval);
+      self.now = self.timestamp();
+      self.dt = self.dt + Math.min(1, (self.now - self.last) / 1000);
+      while(self.dt > 1/self.fps) {
+        self.dt = self.dt - 1/self.fps;
+        self.update(1/self.fps);
+      }
+      self.draw(self.counter, self.dt);
+      self.last = self.now;
+      self.counter++;
+      global.requestAnimationFrame(frame);
     }
-  });
+  }
 
-  this.ticker.on('draw', function(interval){
-    if (!self.paused){
-      self.draw(interval);
-    }
-  })
+  frame();
 };
 
 Game.prototype.end = function(){
@@ -80,15 +92,19 @@ Game.prototype.pause = function(){
 
 Game.prototype.resume = function(){
   if (this.paused){
-    this.paused = false;
+    this.start(true);
     this.emit('resume');
   }
 };
 
-Game.prototype.update = function(interval){
-  this.emit('update', interval);
+Game.prototype.update = function(dt){
+  this.emit('update', dt);
 };
 
-Game.prototype.draw = function(interval){
-  this.emit('draw', this.renderer, interval)
+Game.prototype.draw = function(counter, dt){
+  this.emit('draw', this.renderer, dt, counter)
 };
+
+Game.prototype.timestamp = function() {
+  return global.performance && global.performance.now ? global.performance.now() : new Date().getTime();
+}
