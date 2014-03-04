@@ -1,12 +1,12 @@
 var Game = require('./index');
 var Keyboard = require('crtrdg-keyboard');
+var tic = require('tic')();
 
 var canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
-var context = canvas.getContext('2d');
 
 var game = new Game({
-  renderer: context
+  renderer: canvas.getContext('2d')
 });
 
 game.width = canvas.width = 800;
@@ -31,18 +31,9 @@ keyboard.on('keydown', function(key){
 });
 
 var box = {
-  position: {
-    x: 0,
-    y: 0
-  },
-  size: {
-    x: 10,
-    y: 10
-  },
-  velocity: {
-    x: 0,
-    y: 0
-  },
+  position: { x: 0, y: 0 },
+  size: { x: 10, y: 10 },
+  velocity: { x: 0, y: 0 },
   speed: 10,
   friction: 0.7,
   color: '#000'
@@ -60,6 +51,7 @@ game.on('start', function(){
 });
 
 game.on('update', function(dt){
+  tic.tick(dt);
   box.update(dt)
 
   if ('A' in keysDown) box.velocity.x -= box.speed;
@@ -78,5 +70,9 @@ game.on('draw', function(context){
   context.fillStyle = box.color;
   context.fillRect(box.position.x, box.position.y, box.size.x, box.size.y);
 });
+
+tic.interval(function() {
+  console.log('happening')
+}, 1);
 
 game.start();

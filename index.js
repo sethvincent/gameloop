@@ -47,37 +47,42 @@ function Game(options){
 
 
   /*
+  * step
+  */
+  this.step = 1/this.fps;
+
+  /*
   * Avoid the max listeners error
   */
   
   this.setMaxListeners(options.maxListeners || 0);
 }
 
-Game.prototype.start = function(restart){
-  var self = this;
+Game.prototype.start = function(){
   this.paused = false;
-  this.counter = 0;
+  this.emit('start');
   this.dt = 0;
-  this.now = null;
-  this.last = this.timestamp();
-  
-  function frame() {
-    if (!self.paused){
-      self.now = self.timestamp();
-      self.dt = self.dt + Math.min(1, (self.now - self.last) / 1000);
-      while(self.dt > 1/self.fps) {
-        self.dt = self.dt - 1/self.fps;
-        self.update(1/self.fps);
-      }
-      self.draw(self.counter, self.dt);
-      self.last = self.now;
-      self.counter++;
-      global.requestAnimationFrame(frame);
-    }
-  }
-
-  frame();
+  this.time = null;
+  this.accumulator = 0.0;
+  var time = this.timestamp();
+  this.frame(time);
 };
+
+Game.prototype.frame = function(time){
+  if (!this.paused){
+    this.dt = Math.min(1, (time - this.time) / 1000);
+    this.time = time;
+    this.accumulator += this.dt;
+
+    while(this.accumulator >= this.step) {
+      this.update(this.step);
+      this.accumulator -= this.step;
+    }
+
+    this.draw(this.dt);
+    global.requestAnimationFrame(this.frame.bind(this));
+  }
+}
 
 Game.prototype.end = function(){
   this.pause();
@@ -93,7 +98,7 @@ Game.prototype.pause = function(){
 
 Game.prototype.resume = function(){
   if (this.paused){
-    this.start(true);
+    this.start();
     this.emit('resume');
   }
 };
@@ -102,8 +107,8 @@ Game.prototype.update = function(dt){
   this.emit('update', dt);
 };
 
-Game.prototype.draw = function(counter, dt){
-  this.emit('draw', this.renderer, dt, counter)
+Game.prototype.draw = function(dt){
+  this.emit('draw', this.renderer, dt)
 };
 
 Game.prototype.timestamp = function() {
