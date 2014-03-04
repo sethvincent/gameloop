@@ -80,6 +80,7 @@ Game.prototype.start = function(restart){
 };
 
 Game.prototype.end = function(){
+  this.pause();
   this.emit('end');
 }
 

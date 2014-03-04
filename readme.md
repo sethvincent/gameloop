@@ -1,5 +1,5 @@
 # gameloop
-> the core methods/events of a game framework: start, end, pause, resume, update, draw
+> the core methods/events of a game loop: start, end, pause, resume, update, draw
 
 Designed for use with browserify.
 
@@ -25,19 +25,34 @@ var gameOne = new Game({
 
 ### Use update and draw events
 ````
-game.on('update', function(interval){});
+game.on('update', function(dt){});
 
 game.on('draw', function(context){});
 ````
 
 ### Use start, pause, and resume methods
 ````
+game.start();
+
+game.end();
+
 game.pause();
 
 game.resume();
-
-game.start();
 ````
+
+These methods have corresponding events:
+
+````
+game.on('start', function(){});
+
+game.on('end', function(){});
+
+game.on('pause', function(){});
+
+game.on('resume', function(){});
+````
+
 
 ## Contributing
 - Fork this repository.
