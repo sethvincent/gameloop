@@ -1,6 +1,6 @@
 {
   "name": "gameloop",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "a gameloop.",
   "main": "index.js",
   "scripts": {
