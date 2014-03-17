@@ -19,7 +19,7 @@ npm install gameloop
 var canvas = document.createElement('canvas');
 
 var game = new Game({
-  renderer: canvas.getContext('2d');
+  renderer: canvas.getContext('2d')
 });
 ````
 
