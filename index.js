@@ -14,7 +14,7 @@ global || (global = window);
       global.performance.mozNow ||
       Date.now ||
       function () {
-        return +new Date();
+        return new Date().getTime();
       });
   })();
 
