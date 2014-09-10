@@ -1,7 +1,7 @@
 {
   "name": "gameloop",
   "version": "0.3.1",
-  "description": "a gameloop.",
+  "description": "super simple game loop for javascript – server or browser.",
   "main": "index.js",
   "scripts": {
     "start": "beefy example.js:bundle.js --live"
