@@ -23,6 +23,10 @@ var game = new Game({
 });
 ````
 
+You can use it server-side by not passing in a canvas context: `var game = Game();`
+
+> the `new` keyword is optional
+
 ### Use update and draw events
 ````
 game.on('update', function(dt){});
