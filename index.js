@@ -143,5 +143,5 @@ Game.prototype.draw = function(dt){
 };
 
 Game.prototype.timestamp = function() {
-  return global.performance && global.performance.now ? global.performance.now() : new Date().getTime();
+  return global.performance.now();
 }
