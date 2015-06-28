@@ -34,7 +34,7 @@ var box = {
   position: { x: 0, y: 0 },
   size: { x: 10, y: 10 },
   velocity: { x: 0, y: 0 },
-  speed: 10,
+  speed: 5,
   friction: 0.7,
   color: '#000'
 }

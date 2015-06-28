@@ -4,7 +4,7 @@
   "description": "super simple game loop for javascript – server or browser.",
   "main": "index.js",
   "scripts": {
-    "start": "beefy example.js:bundle.js --live"
+    "start": "budo example.js --live"
   },
   "repository": {
     "type": "git",
@@ -23,11 +23,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "inherits": "~2.0.0"
+    "component-emitter": "^1.2.0",
+    "inherits": "~2.0.0",
+    "raf": "^3.0.0"
   },
   "devDependencies": {
-    "tape": "~2.1.0",
+    "budo": "^4.1.0",
     "crtrdg-keyboard": "0.0.2",
+    "tape": "~2.1.0",
     "tic": "^0.2.1"
   }
 }
