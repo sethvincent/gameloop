@@ -21,8 +21,7 @@ Game.prototype.start = function () {
   this.emit('start')
   this.dt = 0
   this.accumulator = 0.0
-  var time = this.timestamp()
-  this.frame(time)
+  raf(this.frame.bind(this))
 }
 
 Game.prototype.frame = function (time) {
