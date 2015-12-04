@@ -1,4 +1,4 @@
-var Emitter = require('component-emitter')
+var Emitter = require('eventemitter2').EventEmitter2
 var inherits = require('inherits')
 var raf = require('raf')
 
@@ -7,12 +7,12 @@ inherits(Game, Emitter)
 
 function Game (options) {
   if (!(this instanceof Game)) return new Game(options)
-  var options = options || {}
+  options = options || {}
   Emitter.call(this)
   this.paused = true
   this.renderer = options.renderer || {}
   this.fps = options.fps || 60
-  this.step = 1/this.fps
+  this.step = 1 / this.fps
   this.time = null
 }
 
@@ -25,17 +25,17 @@ Game.prototype.start = function () {
 }
 
 Game.prototype.frame = function (time) {
-  if (!this.paused){
+  if (!this.paused) {
     this.dt = Math.min(1, (time - this.time) / 1000)
     this.time = time
     this.accumulator += this.dt
 
-    while(this.accumulator >= this.step) {
-      this.update(this.step)
+    while (this.accumulator >= this.step) {
+      this.emit('update', this.step)
       this.accumulator -= this.step
     }
 
-    this.draw(this.dt)
+    this.emit('draw', this.renderer, this.step)
     raf(this.frame.bind(this))
   }
 }
@@ -46,27 +46,15 @@ Game.prototype.end = function () {
 }
 
 Game.prototype.pause = function () {
-  if (!this.paused){
+  if (!this.paused) {
     this.paused = true
     this.emit('pause')
   }
 }
 
 Game.prototype.resume = function () {
-  if (this.paused){
+  if (this.paused) {
     this.start()
     this.emit('resume')
   }
-}
-
-Game.prototype.update = function (dt) {
-  this.emit('update', dt)
-}
-
-Game.prototype.draw = function (dt) {
-  this.emit('draw', this.renderer, dt)
-}
-
-Game.prototype.timestamp = function () {
-  return global.performance.now()
 }

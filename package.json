@@ -1,7 +1,7 @@
 {
   "name": "gameloop",
-  "version": "0.3.2",
-  "description": "super simple game loop for javascript – server or browser.",
+  "version": "0.3.3",
+  "description": "simple game loop for javascript – server or browser.",
   "main": "index.js",
   "scripts": {
     "start": "budo example.js --live"
@@ -23,12 +23,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "component-emitter": "^1.2.0",
+    "eventemitter2": "^0.4.14",
     "inherits": "~2.0.0",
     "raf": "^3.0.0"
   },
   "devDependencies": {
-    "budo": "^4.1.0",
+    "budo": "^7.0.0",
     "crtrdg-keyboard": "0.0.2",
     "tape": "~2.1.0",
     "tic": "^0.2.1"
