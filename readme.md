@@ -1,61 +1,63 @@
 # gameloop
 > the core methods/events of a game loop: start, end, pause, resume, update, draw
 
-Designed for use with browserify.
-
-## Requirements
-- node.js
-
 ## Install
 
-````
+```
 npm install gameloop
-````
+```
+
+Designed for use with browserify.
 
 ## Usage
 
 ### Create a canvas and game object:
-```
-var canvas = document.createElement('canvas');
+
+```js
+var canvas = document.createElement('canvas')
 
 var game = new Game({
   renderer: canvas.getContext('2d')
-});
-````
+})
+```
 
 You can use it server-side by not passing in a canvas context: `var game = Game();`
 
 > the `new` keyword is optional
 
 ### Use update and draw events
-````
-game.on('update', function(dt){});
 
-game.on('draw', function(context){});
-````
+```js
+game.on('update', function(dt){})
+
+game.on('draw', function(context){})
+```
 
 ### Use start, pause, and resume methods
-````
-game.start();
 
-game.end();
+```js
+game.start()
 
-game.pause();
+game.end()
 
-game.resume();
-````
+game.pause()
+
+game.resume()
+```
 
 These methods have corresponding events:
 
-````
-game.on('start', function(){});
+```js
+game.on('start', function(){})
 
-game.on('end', function(){});
+game.on('end', function(){
+  game.pause()
+})
 
-game.on('pause', function(){});
+game.on('pause', function(){})
 
-game.on('resume', function(){});
-````
+game.on('resume', function(){})
+```
 
 
 ## Contributing

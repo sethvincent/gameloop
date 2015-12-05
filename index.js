@@ -16,7 +16,7 @@ function Game (options) {
   this.time = null
 }
 
-Game.prototype.start = function () {
+Game.prototype.start = function gameloop_start () {
   this.paused = false
   this.emit('start')
   this.dt = 0
@@ -24,35 +24,42 @@ Game.prototype.start = function () {
   raf(this.frame.bind(this))
 }
 
-Game.prototype.frame = function (time) {
+Game.prototype.frame = function gameloop_frame (time) {
   if (!this.paused) {
     this.dt = Math.min(1, (time - this.time) / 1000)
     this.time = time
     this.accumulator += this.dt
 
     while (this.accumulator >= this.step) {
-      this.emit('update', this.step)
+      this.update(this.step)
       this.accumulator -= this.step
     }
 
-    this.emit('draw', this.renderer, this.step)
+    this.draw(this.renderer, this.step)
     raf(this.frame.bind(this))
   }
 }
 
-Game.prototype.end = function () {
-  this.pause()
+Game.prototype.update = function gameloop_update (dt) {
+  this.emit('update', dt)
+}
+
+Game.prototype.draw = function gameloop_draw (renderer, dt) {
+  this.emit('draw', renderer, dt)
+}
+
+Game.prototype.end = function gameloop_end () {
   this.emit('end')
 }
 
-Game.prototype.pause = function () {
+Game.prototype.pause = function gameloop_pause () {
   if (!this.paused) {
     this.paused = true
     this.emit('pause')
   }
 }
 
-Game.prototype.resume = function () {
+Game.prototype.resume = function gameloop_resume () {
   if (this.paused) {
     this.start()
     this.emit('resume')
