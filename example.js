@@ -25,8 +25,7 @@ var keysDown = keyboard.keysDown
 
 keyboard.on('keydown', function (key) {
   if (key === 'P') {
-    if (game.paused) game.resume()
-    else game.pause()
+    game.toggle()
   }
 })
 

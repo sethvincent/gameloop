@@ -1,9 +1,10 @@
 {
   "name": "gameloop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "simple game loop for javascript – server or browser.",
   "main": "index.js",
   "scripts": {
+    "build-docs": "documentation-readme -s 'API'",
     "start": "budo example.js --live"
   },
   "repository": {
@@ -30,6 +31,7 @@
   "devDependencies": {
     "budo": "^7.0.0",
     "crtrdg-keyboard": "0.0.2",
+    "documentation-readme": "^2.1.1",
     "tape": "~2.1.0",
     "tic": "^0.2.1"
   }
