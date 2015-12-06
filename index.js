@@ -1,4 +1,5 @@
 var Emitter = require('eventemitter2').EventEmitter2
+var now = require('performance-now')
 var inherits = require('inherits')
 var raf = require('raf')
 
@@ -26,41 +27,47 @@ function Game (options) {
   this.renderer = options.renderer || {}
   this.fps = options.fps || 60
   this.step = 1 / this.fps
-  this.time = null
 }
 
 /**
 * Start the game. Emits the `start` event.
 * @name game.start
 * @fires Game#start
+* @param {Object} state – arbitrary starting game state emitted by `start` event.
 * @example
 * game.start()
 */
-Game.prototype.start = function gameloop_start () {
+Game.prototype.start = function gameloop_start (state) {
   this.paused = false
-  this.emit('start')
-  this.dt = 0
-  this.accumulator = 0.0
+  this.last = now()
+  this.time = 0
+  this.accumulator = 0
+  this.previousFrameState = 0
+  this.currentFrameState = 0
+  this.emit('start', state)
   raf(this.frame.bind(this))
 }
 
 /**
 * Execute a frame
-* @name game.start
+* @name game.frame
 * @private
 */
 Game.prototype.frame = function gameloop_frame (time) {
   if (!this.paused) {
-    this.dt = Math.min(1, (time - this.time) / 1000)
-    this.time = time
-    this.accumulator += this.dt
+    var newTime = now()
+    var dt = (newTime - this.last) / 1000
+    if (dt > 0.2) dt = this.step
+    this.accumulator += dt
+    this.last = newTime
 
     while (this.accumulator >= this.step) {
-      this.update(this.step)
+      this.update(this.step, this.time)
+      this.time += dt
       this.accumulator -= this.step
     }
 
-    this.draw(this.renderer, this.step)
+    this.draw(this.renderer, this.accumulator / this.step)
     raf(this.frame.bind(this))
   }
 }
@@ -68,22 +75,23 @@ Game.prototype.frame = function gameloop_frame (time) {
 /**
 * Update the game state. Emits the `update` event. You'll likely never call this method, but you may need to override it. Make sure to always emit the update event with the `delta` time.
 * @name game.update
-* @param {Number} delta – time elapsed since last update
+* @param {Number} interval – interval between each frame
+* @param {Number} time – total time elapsed
 * @fires Game#update
 */
-Game.prototype.update = function gameloop_update (dt) {
-  this.emit('update', dt)
+Game.prototype.update = function gameloop_update (interval, time) {
+  this.emit('update', interval, time)
 }
 
 /**
 * Draw the game. Emits the `draw` event. You'll likely never call this method, but you may need to override it. Make sure to always emit the update event with the renderer and `delta` time.
 * @name game.draw
 * @param {Object} renderer
-* @param {Number} delta – time elapsed since last update
+* @param {Number} deltaTime – time remaining until game.update is called
 * @fires Game#draw
 */
-Game.prototype.draw = function gameloop_draw (renderer, dt) {
-  this.emit('draw', renderer, dt)
+Game.prototype.draw = function gameloop_draw (renderer, frameState) {
+  this.emit('draw', renderer, frameState)
 }
 
 /**
@@ -151,7 +159,7 @@ Game.prototype.toggle = function gameloop_toggle () {
 * End event. Fired when `game.end()` is called.
 *
 * @event Game#end
-* @param {Object} state – state of end game conditions
+* @param {Object} state - state of end game conditions
 * @example
 * game.on('end', function (state) {})
 */
@@ -160,10 +168,12 @@ Game.prototype.toggle = function gameloop_toggle () {
 * Update event.
 *
 * @event Game#update
-* @param {Number} delta
+* @param {Number} interval – interval between each frame
+* @param {Number} frameState – current state of the completion of the frame
+* @param {Number} time – total time elapsed
 * @example
-* game.on('update', function (dt) {
-*   console.log(dt)
+* game.on('update', function (interval, time) {
+*   console.log(interval)
 * })
 */
 
@@ -171,7 +181,7 @@ Game.prototype.toggle = function gameloop_toggle () {
 * Draw event.
 *
 * @event Game#draw
-* @param {Object} renderer
+* @param {Number} frameState – current state of the completion of the frame
 * @param {Number} delta
 * @example
 * game.on('draw', function (renderer, dt) {

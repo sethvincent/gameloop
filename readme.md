@@ -61,12 +61,16 @@ Draw the game. Emits the `draw` event. You'll likely never call this method, but
 **Parameters**
 
 -   `renderer` **Object** 
--   `delta` **Number** – time elapsed since last update
--   `dt`  
+-   `deltaTime` **Number** – time remaining until game.update is called
+-   `frameState`  
 
 ### game.end
 
 End the game. Emits the `end` event/
+
+**Parameters**
+
+-   `state` **Object** – state of end game conditions
 
 **Examples**
 
@@ -98,6 +102,10 @@ game.resume()
 
 Start the game. Emits the `start` event.
 
+**Parameters**
+
+-   `state` **Object** – arbitrary starting game state emitted by `start` event.
+
 **Examples**
 
 ```javascript
@@ -120,8 +128,8 @@ Update the game state. Emits the `update` event. You'll likely never call this m
 
 **Parameters**
 
--   `delta` **Number** – time elapsed since last update
--   `dt`  
+-   `interval` **Number** – interval between each frame
+-   `time` **Number** – total time elapsed
 
 ### Game#draw
 
@@ -129,7 +137,7 @@ Draw event.
 
 **Parameters**
 
--   `renderer` **Object** 
+-   `frameState` **Number** – current state of the completion of the frame
 -   `delta` **Number** 
 
 **Examples**
@@ -144,10 +152,14 @@ game.on('draw', function (renderer, dt) {
 
 End event. Fired when `game.end()` is called.
 
+**Parameters**
+
+-   `state` **Object** state of end game conditions
+
 **Examples**
 
 ```javascript
-game.on('end', function () {})
+game.on('end', function (state) {})
 ```
 
 ### Game#pause
@@ -186,13 +198,15 @@ Update event.
 
 **Parameters**
 
--   `delta` **Number** 
+-   `interval` **Number** – interval between each frame
+-   `frameState` **Number** – current state of the completion of the frame
+-   `time` **Number** – total time elapsed
 
 **Examples**
 
 ```javascript
-game.on('update', function (dt) {
-  console.log(dt)
+game.on('update', function (interval, time) {
+  console.log(interval)
 })
 ```
 

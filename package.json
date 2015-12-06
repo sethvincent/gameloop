@@ -1,6 +1,6 @@
 {
   "name": "gameloop",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "simple game loop for javascript – server or browser.",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,7 @@
   "dependencies": {
     "eventemitter2": "^0.4.14",
     "inherits": "~2.0.0",
+    "performance-now": "^0.2.0",
     "raf": "^3.0.0"
   },
   "devDependencies": {

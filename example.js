@@ -34,7 +34,7 @@ var box = {
   size: { x: 10, y: 10 },
   velocity: { x: 0, y: 0 },
   speed: 5,
-  friction: 0.7,
+  friction: 0.8,
   color: '#000'
 }
 
@@ -49,9 +49,12 @@ game.on('start', function () {
   console.log('started', this)
 })
 
-game.on('update', function (dt) {
-  tic.tick(dt)
-  box.update(dt)
+game.on('update', function (interval, time) {
+  tic.tick(interval)
+  box.update(interval)
+
+  console.log('interval', interval)
+  console.log('time', time)
 
   if ('A' in keysDown) box.velocity.x -= box.speed
   if ('D' in keysDown) box.velocity.x += box.speed
@@ -64,7 +67,8 @@ game.on('update', function (dt) {
   if (box.position.y + box.size.y >= game.height) box.position.y = game.height - box.size.y
 })
 
-game.on('draw', function (context) {
+game.on('draw', function (context, delta) {
+  console.log('delta', delta)
   context.clearRect(0, 0, canvas.width, canvas.height)
   context.fillStyle = box.color
   context.fillRect(box.position.x, box.position.y, box.size.x, box.size.y)
