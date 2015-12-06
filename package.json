@@ -1,10 +1,11 @@
 {
   "name": "gameloop",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "simple game loop for javascript – server or browser.",
   "main": "index.js",
   "scripts": {
     "build-docs": "documentation-readme -s 'API'",
+    "test": "standard && tape test.js | tap-spec",
     "start": "budo example.js --live"
   },
   "repository": {
@@ -27,12 +28,15 @@
     "eventemitter2": "^0.4.14",
     "inherits": "~2.0.0",
     "performance-now": "^0.2.0",
-    "raf": "^3.0.0"
+    "raf": "^3.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^2.1.1"
   },
   "devDependencies": {
     "budo": "^7.0.0",
     "crtrdg-keyboard": "0.0.2",
     "documentation-readme": "^2.1.1",
+    "standard": "^5.4.1",
     "tape": "~2.1.0",
     "tic": "^0.2.1"
   }

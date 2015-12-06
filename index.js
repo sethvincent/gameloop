@@ -42,8 +42,6 @@ Game.prototype.start = function gameloop_start (state) {
   this.last = now()
   this.time = 0
   this.accumulator = 0
-  this.previousFrameState = 0
-  this.currentFrameState = 0
   this.emit('start', state)
   raf(this.frame.bind(this))
 }
