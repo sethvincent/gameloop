@@ -1,6 +1,6 @@
 {
   "name": "gameloop",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "simple game loop for javascript – server or browser.",
   "main": "index.js",
   "scripts": {

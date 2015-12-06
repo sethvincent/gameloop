@@ -89,12 +89,13 @@ Game.prototype.draw = function gameloop_draw (renderer, dt) {
 /**
 * End the game. Emits the `end` event/
 * @name game.end
+* @param {Object} state – state of end game conditions
 * @fires Game#end
 * @example
 * game.end()
 */
-Game.prototype.end = function gameloop_end () {
-  this.emit('end')
+Game.prototype.end = function gameloop_end (state) {
+  this.emit('end', state)
 }
 
 /**
@@ -150,8 +151,9 @@ Game.prototype.toggle = function gameloop_toggle () {
 * End event. Fired when `game.end()` is called.
 *
 * @event Game#end
+* @param {Object} state – state of end game conditions
 * @example
-* game.on('end', function () {})
+* game.on('end', function (state) {})
 */
 
 /**
