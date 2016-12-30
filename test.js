@@ -28,6 +28,38 @@ test('update event emits interval', function (t) {
   game.start()
 })
 
+test('update event emits correct total time elapsed for default fps value', function (t) {
+  var game = createGame()
+  var maxNumberOfUpdates = 4
+  var expectedTimeInSeconds = maxNumberOfUpdates * game.step
+
+  game.on('update', function (interval, time) {
+    if (--maxNumberOfUpdates <= 0) {
+      game.pause()
+      t.equal(time, expectedTimeInSeconds)
+      t.end()
+    }
+  })
+
+  game.start()
+})
+
+test('update event emits correct total time elapsed for custom fps value', function (t) {
+  var game = createGame({ fps: 20 })
+  var maxNumberOfUpdates = 4
+  var expectedTimeInSeconds = maxNumberOfUpdates * game.step
+
+  game.on('update', function (interval, time) {
+    if (--maxNumberOfUpdates <= 0) {
+      game.pause()
+      t.equal(time, expectedTimeInSeconds)
+      t.end()
+    }
+  })
+
+  game.start()
+})
+
 test('end game', function (t) {
   var game = createGame({ renderer: {} })
   game.on('end', function (data) {
