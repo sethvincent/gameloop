@@ -37,7 +37,7 @@ function Game (options) {
 * @example
 * game.start()
 */
-Game.prototype.start = function gameloop_start (state) {
+Game.prototype.start = function start (state) {
   this.paused = false
   this.last = now()
   this.time = 0
@@ -51,7 +51,7 @@ Game.prototype.start = function gameloop_start (state) {
 * @name game.frame
 * @private
 */
-Game.prototype.frame = function gameloop_frame (time) {
+Game.prototype.frame = function frame (time) {
   if (!this.paused) {
     var newTime = now()
     var dt = (newTime - this.last) / 1000
@@ -77,7 +77,7 @@ Game.prototype.frame = function gameloop_frame (time) {
 * @param {Number} time – total time elapsed
 * @fires Game#update
 */
-Game.prototype.update = function gameloop_update (interval, time) {
+Game.prototype.update = function update (interval, time) {
   this.emit('update', interval, time)
 }
 
@@ -88,7 +88,7 @@ Game.prototype.update = function gameloop_update (interval, time) {
 * @param {Number} deltaTime – time remaining until game.update is called
 * @fires Game#draw
 */
-Game.prototype.draw = function gameloop_draw (renderer, frameState) {
+Game.prototype.draw = function draw (renderer, frameState) {
   this.emit('draw', renderer, frameState)
 }
 
@@ -100,7 +100,7 @@ Game.prototype.draw = function gameloop_draw (renderer, frameState) {
 * @example
 * game.end()
 */
-Game.prototype.end = function gameloop_end (state) {
+Game.prototype.end = function end (state) {
   this.emit('end', state)
 }
 
@@ -111,7 +111,7 @@ Game.prototype.end = function gameloop_end (state) {
 * @example
 * game.pause()
 */
-Game.prototype.pause = function gameloop_pause () {
+Game.prototype.pause = function pause () {
   if (!this.paused) {
     this.paused = true
     this.emit('pause')
@@ -125,7 +125,7 @@ Game.prototype.pause = function gameloop_pause () {
 * @example
 * game.resume()
 */
-Game.prototype.resume = function gameloop_resume () {
+Game.prototype.resume = function resume () {
   if (this.paused) {
     this.start()
     this.emit('resume')
@@ -138,7 +138,7 @@ Game.prototype.resume = function gameloop_resume () {
 * @example
 * game.toggle()
 */
-Game.prototype.toggle = function gameloop_toggle () {
+Game.prototype.toggle = function toggle () {
   if (this.paused) this.resume()
   else this.pause()
 }
