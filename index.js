@@ -60,9 +60,9 @@ Game.prototype.frame = function gameloop_frame (time) {
     this.last = newTime
 
     while (this.accumulator >= this.step) {
-      this.update(this.step, this.time)
-      this.time += dt
+      this.time += this.step
       this.accumulator -= this.step
+      this.update(this.step, this.time)
     }
 
     this.draw(this.renderer, this.accumulator / this.step)
